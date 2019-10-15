@@ -33,17 +33,46 @@ public class TrackController {
     }
 
     @GetMapping("track")
-    public ResponseEntity<?> getAllUsers(){
-        return new ResponseEntity<List<Track>>(trackService.displaySavedTrack(),HttpStatus.OK);
+    public ResponseEntity<?> displaySavedTrack(){
+
+        ResponseEntity responseEntity;
+        try {
+
+            responseEntity= new ResponseEntity(trackService.displaySavedTrack(),HttpStatus.OK);
+        }catch (Exception e)
+        {
+            responseEntity = new ResponseEntity(e.getMessage(),HttpStatus.CONFLICT);
+        }
+
+        return responseEntity;
     }
 
     @RequestMapping(value = "/track/{id}", method = RequestMethod.DELETE)
-    public void removeTrack(@PathVariable Integer id) {
-        trackService.removeTrack(id);
+    public ResponseEntity<?> removeTrack(@PathVariable Integer id) {
+        ResponseEntity responseEntity;
+        try {
+            trackService.removeTrack(id);
+            responseEntity= new ResponseEntity("Successfully removed",HttpStatus.OK);
+        }catch (Exception e)
+        {
+            responseEntity = new ResponseEntity(e.getMessage(),HttpStatus.CONFLICT);
+        }
+
+        return responseEntity;
     }
 
     @RequestMapping(value = "/track/{id}", method = RequestMethod.PUT)
-    public void updateComments(@RequestBody Track track, @PathVariable int id) {
-        trackService.saveTrack(trackService.updateComments(id,track));
+    public ResponseEntity<?> updateComments(@RequestBody Track track, @PathVariable int id) {
+        ResponseEntity responseEntity;
+        try {
+            trackService.saveTrack(trackService.updateComments(id,track));
+            responseEntity= new ResponseEntity("Successfully updated",HttpStatus.OK);
+        }catch (Exception e)
+        {
+            responseEntity = new ResponseEntity(e.getMessage(),HttpStatus.CONFLICT);
+        }
+
+        return responseEntity;
+
     }
 }
